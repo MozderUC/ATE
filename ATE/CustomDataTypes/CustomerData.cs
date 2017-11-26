@@ -19,7 +19,7 @@ namespace ATE.CustomDataTypes
         private DateTime TariffUpdateDate;
         static Random random = new Random();
 
-        public CustomerData(string firstName, string lastName, RateList rate, int money=10)
+        public CustomerData(string firstName, string lastName, RateList rate, int money=50)
         {
             this.FirstName = firstName;
             this.LastName = lastName;

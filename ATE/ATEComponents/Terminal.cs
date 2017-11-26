@@ -24,12 +24,23 @@ namespace ATE.ATEComponents
             this.TerminalPort = port;
         }
 
-
         public void TerminalConnection()
         {
-            TerminalPort.Connect(this);
-            TerminalPort.IncomingCall += TakeIncomingCall;
-            TerminalPort.AnswerToTerminal += TakeAnswer;
+            if(TerminalPort.PortState==false)
+            {
+                TerminalPort.PortConnect(this);
+                TerminalPort.IncomingCall += TakeIncomingCall;
+                TerminalPort.AnswerToTerminal += TakeAnswer;
+            }           
+        }
+        public void TerminalDisconnection()
+        {
+            if(TerminalPort.PortState==true)
+            {
+                TerminalPort.PortDisconnect(this);
+                TerminalPort.IncomingCall += TakeIncomingCall;
+                TerminalPort.AnswerToTerminal += TakeAnswer;
+            }            
         }
         public void Call(int callNumber)
         {
@@ -37,12 +48,10 @@ namespace ATE.ATEComponents
         }
 
         public void TakeIncomingCall(object sender, CallArgs e)
-        {            
-            //ID = e.ID;
+        {                        
             Console.WriteLine("Incoming call from number: {0} to terminal {1}", e.TelephoneNumber, e.TargetTelephoneNumber);            
             Console.WriteLine("Y-Answer\nN-Rejekt");
             char k = Char.ToUpper(Console.ReadKey().KeyChar);
-
             if (k == 'Y')
             {                
                 Console.WriteLine();
@@ -51,14 +60,13 @@ namespace ATE.ATEComponents
             else if (k == 'N')
             {                
                 Console.WriteLine();
-                //EndCall();
+                EndCall();
             }
                                        
         }
 
         public void TakeAnswer(object sender, AnswerArgs e)
-        {
-            //ID = e.Id;
+        {            
             if (e.StateInCall == true)
             {
                 Console.WriteLine("User with number: {0} have answered call from number: {1}", e.TargetTelephoneNumber, e.TelephoneNumber);

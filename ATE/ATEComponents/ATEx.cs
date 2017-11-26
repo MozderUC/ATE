@@ -27,9 +27,7 @@ namespace ATE.ATEComponents
         }
 
         private void CallNumber(object sender, CallArgs e)
-        {
-            //Console.WriteLine("Great you call from number {0}  to number {1}: ",e.TelephoneNumber,e.TargetTelephoneNumber);
-                       
+        {                                   
             if ((customerData.ContainsKey(e.TargetTelephoneNumber) && e.TargetTelephoneNumber != e.TelephoneNumber))
             {
                 if (customerData[e.TelephoneNumber].Item1.PortState == true && customerData[e.TargetTelephoneNumber].Item1.PortState == true)
@@ -39,7 +37,19 @@ namespace ATE.ATEComponents
                         callList.Add(new CallData(e.TelephoneNumber, e.TargetTelephoneNumber, DateTime.Now));
                         customerData[e.TargetTelephoneNumber].Item1.IncommingCall(this,new CallArgs(e.TelephoneNumber,e.TargetTelephoneNumber));
                     }
+                    else
+                    {
+                        Console.WriteLine("We don't have enough money to make the call");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("The subscriber is not available now, please call back later");
                 }                    
+            }
+            else
+            {
+                Console.WriteLine("Number is not exist, please check the number and call again.");
             }                                                     
         }
 
@@ -52,13 +62,16 @@ namespace ATE.ATEComponents
         private void EndCall(object sender, EndCallArgs e)
         {                                   
             CallData callData = callList.Find(x => (x.EndCall.Equals(new DateTime())&&(x.MyNumber==e.TelephoneNumber||x.TargetNumber==e.TelephoneNumber)));
-            Rate rate = customerData[callData.MyNumber].Item2.Rate;           
-            callData.EndCall = DateTime.Now;            
-            callData.Cost = Convert.ToInt32(rate.CostPerMinute * TimeSpan.FromTicks((callData.EndCall - callData.BeginCall).Ticks).TotalMinutes);
-            customerData[callData.MyNumber].Item2.RemoveMoney(callData.Cost);
-            customerData[e.TelephoneNumber].Item1.AnswerToTermiinal(this, new AnswerArgs(callData.MyNumber, callData.TargetNumber, false));            
+            if (!(callData == null))
+            {
+                Rate rate = customerData[callData.MyNumber].Item2.Rate;
+                callData.EndCall = DateTime.Now;
+                int cost = Convert.ToInt32(rate.CostPerMinute * TimeSpan.FromTicks((callData.EndCall - callData.BeginCall).Ticks).TotalSeconds);
+                callData.Cost = cost;
+                customerData[callData.MyNumber].Item2.RemoveMoney(callData.Cost);
+                customerData[e.TelephoneNumber].Item1.AnswerToTermiinal(this, new AnswerArgs(e.TelephoneNumber, callData.TargetNumber, false));
+
+            }                
         }
-
-
     }
 }

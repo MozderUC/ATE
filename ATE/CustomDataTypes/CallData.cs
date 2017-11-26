@@ -13,16 +13,12 @@ namespace ATE.CustomDataTypes
         public DateTime BeginCall { get; set; }
         public DateTime EndCall { get; set; }
         public int Cost { get; set; }
-        //public int ID { get; set; }
-
-        //static Random random = new Random();
-
+                
         public CallData(int myNumber, int targetNumber, DateTime beginCall)
         {           
             MyNumber = myNumber;
             TargetNumber = targetNumber;
-            BeginCall = beginCall;
-            //ID = random.Next(2000000, 9999999);
+            BeginCall = beginCall;           
         }
     }
 }
