@@ -1,1 +1,6 @@
 D:\GitHub\ATE\ATE\bin\Debug\ATE.exe.config
+D:\GitHub\ATE\ATE\bin\Debug\ATE.exe
+D:\GitHub\ATE\ATE\bin\Debug\ATE.pdb
+D:\GitHub\ATE\ATE\obj\Debug\ATE.csprojResolveAssemblyReference.cache
+D:\GitHub\ATE\ATE\obj\Debug\ATE.exe
+D:\GitHub\ATE\ATE\obj\Debug\ATE.pdb

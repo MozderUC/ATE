@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace ATE.CustomDataTypes.Emums
 {
-    class Class1
+    public enum RateList
     {
+        Lite,
+        Mini,
+        Standart,
+        Advanced,
     }
 }

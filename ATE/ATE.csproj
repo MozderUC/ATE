@@ -43,12 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ATEComponents\ArgEvents\CallArgs.cs" />
+    <Compile Include="ATEComponents\ATEx.cs" />
+    <Compile Include="ATEComponents\Port.cs" />
+    <Compile Include="ATEComponents\Terminal.cs" />
+    <Compile Include="CustomDataTypes\CallData.cs" />
+    <Compile Include="CustomDataTypes\CustomerData.cs" />
+    <Compile Include="CustomDataTypes\Emums\RateList.cs" />
+    <Compile Include="CustomDataTypes\Rate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
