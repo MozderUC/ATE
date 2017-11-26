@@ -43,7 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ATEComponents\ArgEvents\AnswerArgs.cs" />
     <Compile Include="ATEComponents\ArgEvents\CallArgs.cs" />
+    <Compile Include="ATEComponents\ArgEvents\EndCallArgs.cs" />
     <Compile Include="ATEComponents\ATEx.cs" />
     <Compile Include="ATEComponents\Port.cs" />
     <Compile Include="ATEComponents\Terminal.cs" />

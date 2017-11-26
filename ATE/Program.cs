@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using ATE.ATEComponents;
 using ATE.CustomDataTypes.Emums;
 
@@ -19,8 +20,13 @@ namespace ATE
             Terminal term2 = ate.AddATEUser("Karl", "Petrov", RateList.Lite);
 
             term1.TerminalConnection();
+            term2.TerminalConnection();
                     
             term1.Call(term2.TerminalNumber);
+            Thread.Sleep(2000);
+
+            term1.EndCall();
+            //term2.EndCall();
 
         }
     }

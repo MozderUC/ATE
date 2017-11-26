@@ -19,8 +19,8 @@ namespace ATE.ATEComponents
             CustomerData Customer = new CustomerData(firstName, lastName, rate);
             Port port = new Port();
             port.CallEvent += CallNumber;
-            //port.AnswerEvent += AnswerNumber;          
-            //port.EndCallEvent += EndCallNumber;
+            port.AnswerFromTerminal += AnswerNumber;          
+            port.EndCall += EndCall;
             customerData.Add(Customer.Number, new Tuple<Port, CustomerData>(port, Customer));
             Terminal terminal = new Terminal(Customer.Number, port);
             return terminal;
@@ -28,12 +28,35 @@ namespace ATE.ATEComponents
 
         private void CallNumber(object sender, CallArgs e)
         {
-            Console.WriteLine("Great you call from number {0}  to number {1}: ",e.TelephoneNumber,e.TargetTelephoneNumber);
-                        
-            if (customerData[e.TelephoneNumber].Item2.Money > customerData[e.TelephoneNumber].Item2.Rate.CostPerMinute)
+            //Console.WriteLine("Great you call from number {0}  to number {1}: ",e.TelephoneNumber,e.TargetTelephoneNumber);
+                       
+            if ((customerData.ContainsKey(e.TargetTelephoneNumber) && e.TargetTelephoneNumber != e.TelephoneNumber))
             {
-                callList.Add(new CallData(e.TelephoneNumber,e.TargetTelephoneNumber,DateTime.Now));                
-            }                          
+                if (customerData[e.TelephoneNumber].Item1.PortState == true && customerData[e.TargetTelephoneNumber].Item1.PortState == true)
+                {
+                    if (customerData[e.TelephoneNumber].Item2.Money > customerData[e.TelephoneNumber].Item2.Rate.CostPerMinute)
+                    {
+                        callList.Add(new CallData(e.TelephoneNumber, e.TargetTelephoneNumber, DateTime.Now));
+                        customerData[e.TargetTelephoneNumber].Item1.IncommingCall(this,new CallArgs(e.TelephoneNumber,e.TargetTelephoneNumber));
+                    }
+                }                    
+            }                                                     
+        }
+
+        private void AnswerNumber(object sender, AnswerArgs e)
+        {
+            //Console.WriteLine("Great number {1}  answer for number {0}: ", e.TelephoneNumber, e.TargetTelephoneNumber);
+            customerData[e.TelephoneNumber].Item1.AnswerToTermiinal(this, e);
+        }
+
+        private void EndCall(object sender, EndCallArgs e)
+        {                                   
+            CallData callData = callList.Find(x => (x.EndCall.Equals(new DateTime())&&(x.MyNumber==e.TelephoneNumber||x.TargetNumber==e.TelephoneNumber)));
+            Rate rate = customerData[callData.MyNumber].Item2.Rate;           
+            callData.EndCall = DateTime.Now;            
+            callData.Cost = Convert.ToInt32(rate.CostPerMinute * TimeSpan.FromTicks((callData.EndCall - callData.BeginCall).Ticks).TotalMinutes);
+            customerData[callData.MyNumber].Item2.RemoveMoney(callData.Cost);
+            customerData[e.TelephoneNumber].Item1.AnswerToTermiinal(this, new AnswerArgs(callData.MyNumber, callData.TargetNumber, false));            
         }
 
 

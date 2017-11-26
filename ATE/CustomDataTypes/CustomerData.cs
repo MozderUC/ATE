@@ -28,6 +28,16 @@ namespace ATE.CustomDataTypes
             TariffUpdateDate = DateTime.Now;                       
             this.Rate = new Rate(rate);
         }
+
+        public void AddMoney(int money)
+        {
+            Money = Money + money;
+        }
+
+        public void RemoveMoney(int money)
+        {
+            Money = Money - money;
+        }
           
            
     }
